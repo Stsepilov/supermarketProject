@@ -32,15 +32,20 @@ def add():
     return render_template('add.html')
 
 
-@app.route('/delete', methods=['GET', 'POST'])
-def delete():
-    if request.method == 'POST':
-        name = request.form['name']
-        db.session.query(Groceries).filter(Groceries.name == name).delete(synchronize_session="fetch")
-        db.session.commit()
-        flash(f'Товар {name} успешно удален!', 'success')
-        return redirect('/')
-    return render_template('delete.html')
+# @app.route('/delete/<int:product_id>', methods=['POST'])
+# def delete(product_id):
+#     product = Groceries.query.get(product_id)
+#     db.session.delete(product)
+#     db.session.commit()
+#     return redirect('/')
+
+@app.route('/delete/<int:grocery_id>', methods=['POST'])
+def delete(grocery_id):
+    product = Groceries.query.get(grocery_id)
+    db.session.delete(product)
+    db.session.commit()
+    flash(f'Товар {product.name} успешно удален!', 'success')
+    return redirect('/')
 
 
 if __name__ == '__main__':
